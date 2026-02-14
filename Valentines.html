@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For MY LOVE ❤️</title>
+
+<style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Segoe UI', sans-serif;
+    }
+    
+    body{
+      overflow:hidden;
+      background:linear-gradient(135deg,#ff758c,#ff7eb3);
+      color:white;
+      text-align:center;
+      transition:background 2s ease;
+    }
+    
+    .glow{
+      background:linear-gradient(135deg,#ff4b6e,#ff1e56);
+    }
+    .heart {
+    pointer-events: none; /* <-- ignore clicks */
+}
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* show full image */
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  background: rgba(0,0,0,0.2); /* optional soft frame */
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+#typedText{
+  white-space: pre-line;
+}
+
+
+
+    
+    /* Sections */
+   .section {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 2s ease;
+  padding: 20px;
+  pointer-events: none; /* ignore clicks when inactive */
+}
+
+.section.active {
+  opacity: 1;
+  pointer-events: auto; /* allow clicks only on active section */
+}
+
+    
+    /* Button */
+    button{
+      padding:14px 30px;
+      background:white;
+      color:#ff4b6e;
+      border:none;
+      border-radius:40px;
+      font-size:1.1rem;
+      cursor:pointer;
+      margin-top:20px;
+    }
+    
+    /* Slideshow */
+.slideshow {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  height: 65vh;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  background: rgba(0,0,0,0.4);
+  padding: 10px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+  color: white;
+  z-index: 9999;
+}
+
+.nav.left {
+  left: 10px;
+}
+
+.nav.right {
+  right: 10px;
+}
+
+
+    
+    .section {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 2s ease;
+  padding: 20px;
+  pointer-events: none; /* ignore clicks when inactive */
+}
+
+.section.active {
+  opacity: 1;
+  pointer-events: auto; /* allow clicks only on active section */
+}
+
+      
+    
+    /* Hearts */
+    .heart{
+      position:absolute;
+      width:15px;
+      height:15px;
+      background:red;
+      transform:rotate(45deg);
+      animation:floatUp 5s linear infinite;
+    }
+    
+    .heart::before,
+    .heart::after{
+      content:"";
+      position:absolute;
+      width:15px;
+      height:15px;
+      background:red;
+      border-radius:50%;
+    }
+    
+    .heart::before{ top:-7px; left:0; }
+    .heart::after{ left:-7px; top:0; }
+    
+    @keyframes floatUp{
+      0%{ transform:translateY(100vh) rotate(45deg); opacity:1; }
+      100%{ transform:translateY(-10vh) rotate(45deg); opacity:0; }
+    }
+    
+    /* Typing text */
+    #typedText{
+      max-width:600px;
+      font-size:1.2rem;
+      line-height:1.6;
+      min-height:150px;
+    }
+    
+    #player{
+      width:0;
+      height:0;
+      opacity:0;
+    }
+    
+    @media(max-width:600px){
+      #typedText{ font-size:1rem; }
+    }
+    </style>
+</head>
+
+<body>
+<iframe
+  id="musicPlayer"
+  width="0"
+  height="0"
+  src=""
+  frameborder="0"
+  allow="autoplay"
+></iframe>
+
+
+<!-- START -->
+<div class="section active" id="startSection">
+  <h1>Happy Valentine's Day My LOVE My DEEPAK ❤️</h1>
+  <button id="startButton" onclick="startExperience()">
+  Tap To Begin 💖
+  
+</button>
+
+</div>
+
+<!-- PHOTO -->
+<div class="section" id="photoSection">
+    <div class="slideshow" id="slideshow">
+        <img src="pic.jpeg" class="slide active">
+        <img src="pic1.jpeg" class="slide">
+        <img src="pic2.jpeg" class="slide">
+        <img src="pic3.jpeg" class="slide">
+        <img src="pic4.jpeg" class="slide">
+        <img src="pic5.jpeg" class="slide">
+      
+        <!-- Navigation Arrows -->
+        <div class="nav left" onclick="prevSlide()">❮</div>
+        <div class="nav right" onclick="nextSlide()">❯</div>
+      </div>
+      
+    <h2 style="margin-top:20px;">You make me like me better 💕</h2>
+
+    <button id="loveBtn" onclick="goToNote()" style="display:none;">
+        Click me please 💌
+    </button>
+  </div>
+
+<!-- NOTE -->
+<div class="section" id="noteSection">
+  <h1>My Love 💌</h1>
+  <div id="typedText"></div>
+</div>
+
+
+<script>
+// Floating hearts
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}
+setInterval(createHeart, 250);
+
+// Extra burst effect
+function burstHearts() {
+  for(let i=0;i<40;i++){
+    createHeart();
+  }
+}
+
+
+
+
+
+// Typing effect
+const message = `DEEPAK,
+
+To the cutest, most adorable, the sweetest, the gentlest man I know.
+
+You make me like me better.
+When I am with you even simple things like doing chores feel magical.
+
+I don’t just love you…
+I choose you. Every single day.
+
+Happy Valentine’s Day ❤️
+
+Forever yours,
+TUBA`;
+
+let index = 0;
+function typeWriter() {
+  if (index < message.length) {
+    document.getElementById("typedText").innerHTML += message.charAt(index);
+    index++;
+    setTimeout(typeWriter, 40);
+  }
+}
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  startAutoSlide();
+});
+
+
+function startExperience() {
+
+  // 🎵 Start music
+  document.getElementById("musicPlayer").src =
+    "https://www.youtube.com/embed/BcqxLCWn-CE?autoplay=1&loop=1&playlist=BcqxLCWn-CE";
+
+  // hide start screen
+  document.getElementById("startSection").classList.remove("active");
+
+  // show slideshow
+  setTimeout(()=>{
+    document.getElementById("photoSection").classList.add("active");
+  },1000);
+
+  // glow + hearts
+  setTimeout(()=>{
+    document.body.classList.add("glow");
+    burstHearts();
+  },8000);
+}
+
+
+// Slideshow logic
+const slides = document.querySelectorAll(".slide");
+let currentSlide = 0;
+let autoSlideInterval;
+
+// Show slide
+function showSlide(index) {
+  slides.forEach(slide => slide.classList.remove("active"));
+  slides[index].classList.add("active");
+}
+
+// Next slide
+function nextSlide() {
+  if (currentSlide < slides.length - 1) {
+    currentSlide++;
+    showSlide(currentSlide);
+  } else {
+    // Stop at last slide
+    clearInterval(autoSlideInterval);
+    showLoveButton();
+  }
+}
+
+// Previous slide
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    showSlide(currentSlide);
+  }
+}
+
+// Start auto slide
+function startAutoSlide() {
+  autoSlideInterval = setInterval(nextSlide, 10000);
+}
+
+document.addEventListener("DOMContentLoaded", startAutoSlide);
+
+
+function showLoveButton() {
+  document.getElementById("loveBtn").style.display = "inline-block";
+}
+
+function goToNote() {
+  document.getElementById("photoSection").classList.remove("active");
+  document.getElementById("noteSection").classList.add("active");
+  typeWriter();
+}
+
+
+
+</script>
+
+</body>
+</html>
